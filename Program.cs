@@ -1,5 +1,29 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using Microsoft.Extensions.Configuration;
+using simple_graph_console;
+
 Console.WriteLine("Hello, World!");
+
+var appConfig = LoadAppSettings();
+
+if (appConfig == null)
+{
+    Console.WriteLine("Missing or invalid appsettings.json...exiting");
+    return;
+}
+
+var appId = appConfig["appId"];
+var scopesString = appConfig["scopes"];
+var scopes = scopesString.Split(';');
+
+// Initialize Graph client
+GraphHelper.Initialize(appId, scopes, (code, cancellation) => {
+    Console.WriteLine(code.Message);
+    return Task.FromResult(0);
+});
+
+var accessToken = GraphHelper.GetAccessTokenAsync(scopes).Result;
+Console.WriteLine($"Access token: {accessToken}\n");
 
 int choice = -1;
 
@@ -40,4 +64,20 @@ while (choice != 0)
             Console.WriteLine("Invalid choice! Please try again.");
             break;
     }
+}
+
+static IConfigurationRoot LoadAppSettings()
+{
+    var appConfig = new ConfigurationBuilder()
+        .AddUserSecrets<Program>()
+        .Build();
+
+    // Check for required settings
+    if (string.IsNullOrEmpty(appConfig["appId"]) ||
+        string.IsNullOrEmpty(appConfig["scopes"]))
+    {
+        return null;
+    }
+
+    return appConfig;
 }
