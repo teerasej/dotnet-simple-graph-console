@@ -28,5 +28,18 @@ namespace simple_graph_console
             var response = await tokenCredential.GetTokenAsync(context);
             return response.Token;
         }
+
+        public static async Task<User> GetMeAsync()
+        {
+            try
+            {
+                return await graphClient.Me.Request().GetAsync();
+            }
+            catch (ServiceException ex)
+            {
+                Console.WriteLine($"Error getting signed-in user: {ex.Message}");
+                return null;
+            }
+        }
     }
 }

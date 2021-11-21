@@ -34,6 +34,7 @@ while (choice != 0)
     Console.WriteLine("1. Display access token");
     Console.WriteLine("2. View this week's calendar");
     Console.WriteLine("3. Add an event");
+    Console.WriteLine("4. Say, Hi");
 
     try
     {
@@ -59,6 +60,10 @@ while (choice != 0)
             break;
         case 3:
             // Create a new event
+            break;
+        case 4: 
+            var user = GraphHelper.GetMeAsync().Result;
+            Console.WriteLine($"Hi, {user.DisplayName}");
             break;
         default:
             Console.WriteLine("Invalid choice! Please try again.");
