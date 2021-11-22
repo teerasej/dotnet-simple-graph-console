@@ -69,7 +69,7 @@ while (choice != 0)
             break;
 
         case 3:
-            var emails = await EmailHelper.GetEmailsAsync();
+            var emails = await EmailHelper.GetEmailsAsync(20);
             for (int i = 0; i < emails.Count; i++)
             {
                 Message message = emails[i];

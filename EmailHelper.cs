@@ -15,11 +15,11 @@ namespace simple_graph_console
             graphClient = client;
         }
 
-        public static async Task<IUserMessagesCollectionPage> GetEmailsAsync()
+        public static async Task<IUserMessagesCollectionPage> GetEmailsAsync(int amount = 10)
         {
             try
             {
-                return await graphClient.Me.Messages.Request().GetAsync();
+                return await graphClient.Me.Messages.Request().Top(amount).GetAsync();
             }
             catch (ServiceException ex)
             {
