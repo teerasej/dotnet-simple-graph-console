@@ -49,6 +49,7 @@ while (choice != 0)
     Console.WriteLine("---- OneDrive ----");
     Console.WriteLine("5. List All Files");
     Console.WriteLine("6. New Folder");
+    Console.WriteLine("7. Download a file");
 
 
     try
@@ -131,6 +132,7 @@ while (choice != 0)
                 }
 
                 Console.WriteLine($"{i + 1}: ({itemType}) {driveItem.Name}");
+                Console.WriteLine($"    id: {driveItem.Id}");
             }
 
             Console.WriteLine("\n");
@@ -142,6 +144,15 @@ while (choice != 0)
 
             Console.WriteLine("Creating...");
             await OneDriveHelper.CreateNewFolderAsync(folderName);
+            Console.WriteLine("Done!\n");
+            break;
+
+        case 7: 
+            Console.WriteLine("Item Id:");
+            var itemId = Console.ReadLine();
+
+            Console.WriteLine("Downloading...");
+            await OneDriveHelper.DownloadFileAsync(itemId);
             Console.WriteLine("Done!\n");
             break;
 

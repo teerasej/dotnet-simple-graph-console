@@ -54,5 +54,25 @@ namespace simple_graph_console
                 return null;
             }
         }
+
+        public static async Task DownloadFileAsync(string driveItemId)
+        {
+            try
+            {
+                var driveItem = await graphClient.Me.Drive.Items[driveItemId].Request().GetAsync();
+                var stream = await graphClient.Me.Drive.Items[driveItemId].Content.Request().GetAsync();
+
+                using (var fileStream = System.IO.File.Create(driveItem.Name))
+                {
+                    stream.Seek(0, SeekOrigin.Begin);
+                    stream.CopyTo(fileStream);
+                }
+            }
+            catch (ServiceException ex)
+            {
+                Console.WriteLine($"Error creating new folder in onedrive: {ex.Message}");
+            }
+
+        }
     }
 }
