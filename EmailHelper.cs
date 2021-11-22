@@ -31,10 +31,19 @@ namespace simple_graph_console
                 return null;
             }
         }
+
+        public static async Task<Attachment> GetAttachmentAsync(string messageId, string attachmentId)
+        {
+            try
+            {
+                // return await graphClient.Me.Messages.Request().Select("id,sender").Top(amount).GetAsync();
+                return await graphClient.Me.Messages[messageId].Attachments[attachmentId]
+                .Request()
+                .GetAsync();
             }
             catch (ServiceException ex)
             {
-                Console.WriteLine($"Error getting user's message: {ex.Message}");
+                Console.WriteLine($"Error getting message's attachment: {ex.Message}");
                 return null;
             }
         }

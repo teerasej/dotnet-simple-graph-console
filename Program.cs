@@ -1,8 +1,8 @@
-// See https://aka.ms/new-console-template for more information
+﻿// See https://aka.ms/new-console-template for more information
 using Microsoft.Extensions.Configuration;
 using Microsoft.Graph;
 using simple_graph_console;
-
+using System.IO;
 
 
 var appConfig = new ConfigurationBuilder()
@@ -82,6 +82,13 @@ while (choice != 0)
                 if ((bool)message.HasAttachments)
                 {
                     Console.WriteLine($"   Attachments: {message.Attachments.Count}");
+
+                    foreach (var attachment in message.Attachments.CurrentPage)
+                    {
+                        var file = EmailHelper.GetAttachmentAsync(message.Id, attachment.Id).Result as FileAttachment;
+                        System.IO.File.WriteAllBytes("test.jpg", file.ContentBytes);
+
+                    }
                 }
 
                 Console.WriteLine("\n");
