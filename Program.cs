@@ -27,7 +27,7 @@ GraphHelper.Initialize(appId, scopes, (code, cancellation) =>
 
 var accessToken = GraphHelper.GetAccessTokenAsync(scopes).Result;
 Console.WriteLine("Signed In...\n");
-Console.WriteLine($"Access token: {accessToken}\n");
+// Console.WriteLine($"Access token: {accessToken}\n");
 int choice = -1;
 
 while (choice != 0)
