@@ -30,6 +30,51 @@ namespace simple_graph_console
 
         public static async Task<DriveItem> CreateNewFolderAsync(string name = "temp")
         {
+            if (!name.Contains("/"))
+            {
+                var folderNames = name.Split("/");
+
+                String nameForNewFolder;
+                String createdFolderId = "";
+                DriveItem createdFolder;
+                DriveItem newFolder;
+
+                for (int i = 0; i < folderNames.Length; i++)
+                {
+                    nameForNewFolder = folderNames[i];
+
+                    newFolder = new DriveItem
+                    {
+                        Name = nameForNewFolder,
+                        Folder = new Folder
+                        {
+                        },
+                        AdditionalData = new Dictionary<string, object>()
+                        {
+                            {"@microsoft.graph.conflictBehavior", "rename"}
+                        }
+                    };
+
+                    if (i == 0)
+                    {
+                        createdFolder = await graphClient.Me.Drive.Root.Children
+                        .Request()
+                        .AddAsync(newFolder);
+
+                    }
+                    else
+                    {
+                        createdFolder = await graphClient.Me.Drive.Items[createdFolder].Children
+                        .Request()
+                        .AddAsync(newFolder);
+                    }
+                }
+            }
+            else 
+            {
+
+            }
+
             var driveItem = new DriveItem
             {
                 Name = name,
