@@ -19,7 +19,8 @@ namespace simple_graph_console
         {
             try
             {
-                return await graphClient.Me.Messages.Request().Select("id,sender").Top(amount).GetAsync();
+                // return await graphClient.Me.Messages.Request().Select("id,sender").Top(amount).GetAsync();
+                return await graphClient.Me.Messages.Request().Top(amount).GetAsync();
             }
             catch (ServiceException ex)
             {
