@@ -27,5 +27,32 @@ namespace simple_graph_console
                 return null;
             }
         }
+
+        public static async Task<DriveItem> CreateNewFolderAsync(string name = "temp")
+        {
+            var driveItem = new DriveItem
+            {
+                Name = name,
+                Folder = new Folder
+                {
+                },
+                AdditionalData = new Dictionary<string, object>()
+                {
+                    {"@microsoft.graph.conflictBehavior", "rename"}
+                }
+            };
+
+            try
+            {
+                return await graphClient.Me.Drive.Root.Children
+                .Request()
+                .AddAsync(driveItem);
+            }
+            catch (ServiceException ex)
+            {
+                Console.WriteLine($"Error creating new folder in onedrive: {ex.Message}");
+                return null;
+            }
+        }
     }
 }

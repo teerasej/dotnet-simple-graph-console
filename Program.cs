@@ -48,6 +48,7 @@ while (choice != 0)
     Console.WriteLine("4. Send an Email");
     Console.WriteLine("---- OneDrive ----");
     Console.WriteLine("5. List All Files");
+    Console.WriteLine("6. New Folder");
 
 
     try
@@ -133,6 +134,15 @@ while (choice != 0)
             }
 
             Console.WriteLine("\n");
+            break;
+
+        case 6: 
+            Console.WriteLine("Folder Name:");
+            var folderName = Console.ReadLine();
+
+            Console.WriteLine("Creating...");
+            await OneDriveHelper.CreateNewFolderAsync(folderName);
+            Console.WriteLine("Done!\n");
             break;
 
         default:
