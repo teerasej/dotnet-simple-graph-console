@@ -15,5 +15,17 @@ namespace simple_graph_console
             graphClient = client;
         }
 
+        public static async Task<IUserMessagesCollectionPage> GetEmailsAsync()
+        {
+            try
+            {
+                return await graphClient.Me.Messages.Request().GetAsync();
+            }
+            catch (ServiceException ex)
+            {
+                Console.WriteLine($"Error getting user's message: {ex.Message}");
+                return null;
+            }
+        }
     }
 }

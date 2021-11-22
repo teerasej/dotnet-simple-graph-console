@@ -1,5 +1,6 @@
-// See https://aka.ms/new-console-template for more information
+﻿// See https://aka.ms/new-console-template for more information
 using Microsoft.Extensions.Configuration;
+using Microsoft.Graph;
 using simple_graph_console;
 
 
@@ -42,6 +43,8 @@ while (choice != 0)
     Console.WriteLine("0. Exit");
     Console.WriteLine("1. Display access token");
     Console.WriteLine("2. Hello, Me.");
+    Console.WriteLine("---- Email ----");
+    Console.WriteLine("3. List Emails");
 
     try
     {
@@ -64,6 +67,21 @@ while (choice != 0)
             var user = await GraphHelper.GetMeAsync();
             Console.WriteLine($"Hi, {user.DisplayName}\n");
             break;
+
+        case 3:
+            var emails = await EmailHelper.GetEmailsAsync();
+            for (int i = 0; i < emails.Count; i++)
+            {
+                Message message = emails[i];
+
+                Console.WriteLine($"{i + 1}: message {message.Id}");
+                Console.WriteLine($"   Sender: {message.Sender.EmailAddress.Name} ({message.Sender.EmailAddress.Address})");
+                Console.WriteLine($"   Subject: {message.Subject}");
+                Console.WriteLine("\n");
+            }
+
+            break;
+
         default:
             Console.WriteLine("Invalid choice! Please try again.");
             break;
