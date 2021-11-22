@@ -47,5 +47,43 @@ namespace simple_graph_console
                 return null;
             }
         }
+
+        public static async Task SendSimpleEmailAsync(string recipientAddress, string subject, string content)
+        {
+            try
+            {
+                var message = new Message
+                {
+                    Subject = subject,
+                    Body = new ItemBody
+                    {
+                        ContentType = BodyType.Text,
+                        Content = content
+                    },
+                    ToRecipients = new List<Recipient>()
+                    {
+                        new Recipient
+                        {
+                            EmailAddress = new EmailAddress
+                            {
+                                Address = recipientAddress
+                            }
+                        }
+                    }
+                };
+                
+
+                var saveToSentItems = true;
+
+                await graphClient.Me
+                    .SendMail(message, saveToSentItems)
+                    .Request()
+                    .PostAsync();
+            }
+            catch (ServiceException ex)
+            {
+                Console.WriteLine($"Error sending message: {ex.Message}");
+            }
+        }
     }
 }
