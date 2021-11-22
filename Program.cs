@@ -44,6 +44,8 @@ while (choice != 0)
     Console.WriteLine("2. Hello, Me.");
     Console.WriteLine("---- Email ----");
     Console.WriteLine("3. List Emails");
+    Console.WriteLine("4. Send an Email");
+
 
     try
     {
@@ -94,6 +96,21 @@ while (choice != 0)
                 Console.WriteLine("\n");
             }
 
+            break;
+
+        case 4:
+            Console.WriteLine("Recipient Email:");
+            var recipientEmailAddress = Console.ReadLine();
+            
+            Console.WriteLine("Subject:");
+            var subject = Console.ReadLine();
+
+            Console.WriteLine("Content:");
+            var content = Console.ReadLine();
+
+            Console.WriteLine("Sending...");
+            await EmailHelper.SendSimpleEmailAsync(recipientEmailAddress, subject, content);
+            Console.WriteLine("Sent!\n");
             break;
 
         default:
