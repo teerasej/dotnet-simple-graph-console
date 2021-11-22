@@ -32,7 +32,8 @@ Console.WriteLine("Signed In...\n");
 
 // Email Helper
 EmailHelper.Initialize(GraphHelper.graphClient);
-
+// OneDriveHelper
+OneDriveHelper.Initialize(GraphHelper.graphClient);
 
 int choice = -1;
 
