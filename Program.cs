@@ -1,4 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+// See https://aka.ms/new-console-template for more information
 using Microsoft.Extensions.Configuration;
 using simple_graph_console;
 
@@ -28,6 +28,12 @@ GraphHelper.Initialize(appId, scopes, (code, cancellation) =>
 var accessToken = GraphHelper.GetAccessTokenAsync(scopes).Result;
 Console.WriteLine("Signed In...\n");
 Console.WriteLine($"Access token: {accessToken}\n");
+
+
+// Email Helper
+EmailHelper.Initialize(GraphHelper.graphClient);
+
+
 int choice = -1;
 
 while (choice != 0)
