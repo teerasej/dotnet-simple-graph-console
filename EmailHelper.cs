@@ -20,7 +20,17 @@ namespace simple_graph_console
             try
             {
                 // return await graphClient.Me.Messages.Request().Select("id,sender").Top(amount).GetAsync();
-                return await graphClient.Me.Messages.Request().Top(amount).GetAsync();
+                return await graphClient.Me.Messages.Request()
+                .Top(amount)
+                .Expand("attachments")
+                .GetAsync();
+            }
+            catch (ServiceException ex)
+            {
+                Console.WriteLine($"Error getting user's message: {ex.Message}");
+                return null;
+            }
+        }
             }
             catch (ServiceException ex)
             {
