@@ -28,7 +28,6 @@ GraphHelper.Initialize(appId, scopes, (code, cancellation) =>
 
 var accessToken = GraphHelper.GetAccessTokenAsync(scopes).Result;
 Console.WriteLine("Signed In...\n");
-Console.WriteLine($"Access token: {accessToken}\n");
 
 
 // Email Helper
@@ -85,9 +84,10 @@ while (choice != 0)
 
                     foreach (var attachment in message.Attachments.CurrentPage)
                     {
-                        var file = EmailHelper.GetAttachmentAsync(message.Id, attachment.Id).Result as FileAttachment;
-                        System.IO.File.WriteAllBytes("test.jpg", file.ContentBytes);
-
+                        if(attachment is FileAttachment) {
+                            var fileAttachment = attachment as FileAttachment;
+                            System.IO.File.WriteAllBytes(fileAttachment.Name, fileAttachment.ContentBytes);
+                        }
                     }
                 }
 
