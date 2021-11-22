@@ -14,5 +14,18 @@ namespace simple_graph_console
         {
             graphClient = client;
         }
+
+        public static async Task<IDriveItemChildrenCollectionPage> GetUserDriveItemsAsync()
+        {
+            try
+            {
+                return await graphClient.Me.Drive.Root.Children.Request().GetAsync();
+            }
+            catch (ServiceException ex)
+            {
+                Console.WriteLine($"Error getting user's drive items: {ex.Message}");
+                return null;
+            }
+        }
     }
 }

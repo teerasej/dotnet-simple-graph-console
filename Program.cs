@@ -46,6 +46,8 @@ while (choice != 0)
     Console.WriteLine("---- Email ----");
     Console.WriteLine("3. List Emails");
     Console.WriteLine("4. Send an Email");
+    Console.WriteLine("---- OneDrive ----");
+    Console.WriteLine("5. List All Files");
 
 
     try
@@ -112,6 +114,25 @@ while (choice != 0)
             Console.WriteLine("Sending...");
             await EmailHelper.SendSimpleEmailAsync(recipientEmailAddress, subject, content);
             Console.WriteLine("Sent!\n");
+            break;
+
+        case 5:
+            var onedriveItems = await OneDriveHelper.GetUserDriveItemsAsync();
+            Console.WriteLine($"Items in Drive: {onedriveItems.Count}");
+
+            for (int i = 0; i < onedriveItems.Count; i++)
+            {
+                DriveItem driveItem = onedriveItems[i];
+
+                var itemType = "File";
+                if(driveItem.Folder != null) {
+                    itemType = "Folder";
+                }
+
+                Console.WriteLine($"{i + 1}: ({itemType}) {driveItem.Name}");
+            }
+
+            Console.WriteLine("\n");
             break;
 
         default:
