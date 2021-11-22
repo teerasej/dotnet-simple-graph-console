@@ -1,4 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+// See https://aka.ms/new-console-template for more information
 using Microsoft.Extensions.Configuration;
 using Microsoft.Graph;
 using simple_graph_console;
@@ -77,6 +77,13 @@ while (choice != 0)
                 Console.WriteLine($"{i + 1}: message {message.Id}");
                 Console.WriteLine($"   Sender: {message.Sender.EmailAddress.Name} ({message.Sender.EmailAddress.Address})");
                 Console.WriteLine($"   Subject: {message.Subject}");
+
+
+                if ((bool)message.HasAttachments)
+                {
+                    Console.WriteLine($"   Attachments: {message.Attachments.Count}");
+                }
+
                 Console.WriteLine("\n");
             }
 
