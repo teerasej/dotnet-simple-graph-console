@@ -33,7 +33,7 @@ namespace simple_graph_console
             }
             catch (ServiceException ex)
             {
-                Console.WriteLine($"Error getting user's message: {ex.Message}");
+                Console.WriteLine($"Error creating team: {ex.Message}");
                 return null;
             }
         }
