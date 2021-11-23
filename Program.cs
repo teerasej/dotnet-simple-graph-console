@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Graph;
 using simple_graph_console;
+using System.Globalization;
 using System.IO;
 
 
@@ -36,6 +37,8 @@ EmailHelper.Initialize(GraphHelper.graphClient);
 OneDriveHelper.Initialize(GraphHelper.graphClient);
 // TeamHelper
 TeamHelper.Initialize(GraphHelper.graphClient);
+// CalendarHelper
+CalendarHelper.Initialize(GraphHelper.graphClient);
 
 int choice = -1;
 
@@ -59,6 +62,10 @@ while (choice != 0)
 
     Console.WriteLine("---- Team ----");
     Console.WriteLine("10. Create Team");
+
+    Console.WriteLine("---- Calendar ----");
+    Console.WriteLine("11. Create Calendar");
+    Console.WriteLine("12. Create Event");
 
 
     try
@@ -100,7 +107,8 @@ while (choice != 0)
 
                     foreach (var attachment in message.Attachments.CurrentPage)
                     {
-                        if(attachment is FileAttachment) {
+                        if (attachment is FileAttachment)
+                        {
                             var fileAttachment = attachment as FileAttachment;
                             System.IO.File.WriteAllBytes(fileAttachment.Name, fileAttachment.ContentBytes);
                         }
@@ -115,7 +123,7 @@ while (choice != 0)
         case 4:
             Console.WriteLine("Recipient Email:");
             var recipientEmailAddress = Console.ReadLine();
-            
+
             Console.WriteLine("Subject:");
             var subject = Console.ReadLine();
 
@@ -136,7 +144,8 @@ while (choice != 0)
                 DriveItem driveItem = onedriveItems[i];
 
                 var itemType = "File";
-                if(driveItem.Folder != null) {
+                if (driveItem.Folder != null)
+                {
                     itemType = "Folder";
                 }
 
@@ -147,7 +156,7 @@ while (choice != 0)
             Console.WriteLine("\n");
             break;
 
-        case 6: 
+        case 6:
             Console.WriteLine("Folder Name:");
             var folderName = Console.ReadLine();
 
@@ -156,7 +165,7 @@ while (choice != 0)
             Console.WriteLine("Done!\n");
             break;
 
-        case 7: 
+        case 7:
             Console.WriteLine("Item Id:");
             var itemId = Console.ReadLine();
 
@@ -165,7 +174,7 @@ while (choice != 0)
             Console.WriteLine("Done!\n");
             break;
 
-        case 8: 
+        case 8:
             Console.WriteLine("file name to upload (put file in project's root only):");
             var fileName = Console.ReadLine();
 
@@ -179,7 +188,7 @@ while (choice != 0)
             var targetMessageId = Console.ReadLine();
 
             var targetMessage = await EmailHelper.GetMessageWithAttachmentAsync(targetMessageId);
-            
+
 
             if ((bool)targetMessage.HasAttachments)
             {
@@ -187,7 +196,7 @@ while (choice != 0)
 
                 foreach (var attachment in targetMessage.Attachments.CurrentPage)
                 {
-                    if(attachment is FileAttachment) 
+                    if (attachment is FileAttachment)
                     {
                         var fileAttachment = attachment as FileAttachment;
                         System.IO.File.WriteAllBytes(fileAttachment.Name, fileAttachment.ContentBytes);
@@ -199,13 +208,13 @@ while (choice != 0)
                     }
                 }
             }
-            else 
+            else
             {
                 Console.WriteLine("Sorry, this email has no attachment.\n");
             }
 
             break;
-            
+
         case 10:
             Console.WriteLine("Team Name:");
             var teamName = Console.ReadLine();
@@ -219,6 +228,32 @@ while (choice != 0)
             Console.WriteLine("     Creating team...");
             var createdTeam = await TeamHelper.CreateTeamAsync(teamName, teamDescription, channelName);
             Console.WriteLine("     Creating channel...");
+            Console.WriteLine("     Done.");
+            break;
+
+        case 11:
+
+            Console.WriteLine("Calendar name:");
+            var calendarName = Console.ReadLine();
+
+            Console.WriteLine("     Creating Calendar...");
+            var createdCalendar = await CalendarHelper.CreateCalendar(calendarName);
+            Console.WriteLine("     Done.");
+
+            break;
+
+        case 12:
+            Console.WriteLine("Event Name:");
+            var eventName = Console.ReadLine();
+
+            Console.WriteLine("Event Description:");
+            var eventDescription = Console.ReadLine();
+
+            Console.WriteLine("Location name:");
+            var locationName = Console.ReadLine();
+
+            Console.WriteLine("     Creating Event...");
+            var createdEvent = await CalendarHelper.CreateEvent(eventName, eventDescription, locationName);
             Console.WriteLine("     Done.");
             break;
 
