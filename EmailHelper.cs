@@ -85,5 +85,21 @@ namespace simple_graph_console
                 Console.WriteLine($"Error sending message: {ex.Message}");
             }
         }
+
+        public static async Task<Message> GetMessageWithAttachmentAsync(string messageId)
+        {
+            try
+            {
+                return await graphClient.Me.Messages[messageId]
+                .Request()
+                .Expand("attachments")
+                .GetAsync();
+            }
+            catch (ServiceException ex)
+            {
+                Console.WriteLine($"Error getting message's attachment: {ex.Message}");
+                return null;
+            }
+        }
     }
 }
