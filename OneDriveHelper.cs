@@ -77,22 +77,59 @@ namespace simple_graph_console
 
         public static async Task UploadFileAsync(string fileName)
         {
-            try
-            {
-                byte[] data = System.IO.File.ReadAllBytes(fileName);
-                Stream stream = new MemoryStream(data);
 
-                await graphClient.Me
-                .Drive
-                .Root
-                .ItemWithPath(fileName)
-                .Content
-                .Request()
-                .PutAsync<DriveItem>(stream);
-            }
-            catch (ServiceException ex)
+            using (var fileStream = System.IO.File.OpenRead(fileName))
             {
-                Console.WriteLine($"Error uploading file to onedrive: {ex.Message}");
+                // Use properties to specify the conflict behavior
+                // in this case, replace
+                var uploadProps = new DriveItemUploadableProperties
+                {
+                    ODataType = null,
+                    AdditionalData = new Dictionary<string, object>
+                    {
+                        { "@microsoft.graph.conflictBehavior", "replace" }
+                    }
+                };
+
+                // Create the upload session
+                // itemPath does not need to be a path to an existing item
+                var uploadSession = await graphClient.Me.Drive.Root
+                    .ItemWithPath(fileName)
+                    .CreateUploadSession(uploadProps)
+                    .Request()
+                    .PostAsync();
+
+                // Max slice size must be a multiple of 320 KiB
+                int maxSliceSize = 320 * 1024;
+                var fileUploadTask =
+                    new LargeFileUploadTask<DriveItem>(uploadSession, fileStream, maxSliceSize);
+
+                // Create a callback that is invoked after each slice is uploaded
+                IProgress<long> progress = new Progress<long>(prog =>
+                {
+                    Console.WriteLine($"        Uploaded {prog} bytes of {fileStream.Length} bytes");
+                });
+
+                try
+                {
+                    // Upload the file
+                    var uploadResult = await fileUploadTask.UploadAsync(progress);
+
+                    if (uploadResult.UploadSucceeded)
+                    {
+                        // The ItemResponse object in the result represents the
+                        // created item.
+                        Console.WriteLine($"        Upload complete, item ID: {uploadResult.ItemResponse.Id}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("         Upload failed");
+                    }
+                }
+                catch (ServiceException ex)
+                {
+                    Console.WriteLine($"        Error uploading: {ex.ToString()}");
+                }
             }
 
         }
