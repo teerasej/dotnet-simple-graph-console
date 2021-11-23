@@ -1,4 +1,4 @@
-// See https://aka.ms/new-console-template for more information
+﻿// See https://aka.ms/new-console-template for more information
 using Microsoft.Extensions.Configuration;
 using Microsoft.Graph;
 using simple_graph_console;
@@ -51,6 +51,9 @@ while (choice != 0)
     Console.WriteLine("6. New Folder");
     Console.WriteLine("7. Download a file");
     Console.WriteLine("8. Upload a file");
+
+    Console.WriteLine("---- Mail to Drive ----");
+    Console.WriteLine("9. Download attachment to OneDrive");
 
 
     try
@@ -165,6 +168,39 @@ while (choice != 0)
             await OneDriveHelper.UploadFileAsync(fileName);
             Console.WriteLine("Done!\n");
             break;
+
+        case 9:
+            Console.WriteLine("Target Message Id:");
+            var targetMessageId = Console.ReadLine();
+
+            var targetMessage = await EmailHelper.GetMessageWithAttachmentAsync(targetMessageId);
+            
+
+            if ((bool)targetMessage.HasAttachments)
+            {
+                Console.WriteLine($"   Attachments: {targetMessage.Attachments.Count}");
+
+                foreach (var attachment in targetMessage.Attachments.CurrentPage)
+                {
+                    if(attachment is FileAttachment) 
+                    {
+                        var fileAttachment = attachment as FileAttachment;
+                        System.IO.File.WriteAllBytes(fileAttachment.Name, fileAttachment.ContentBytes);
+                        Console.WriteLine($"   Downloaded: {fileAttachment.Name}");
+
+                        Console.WriteLine($"        Uploading to OneDrive: {fileAttachment.Name}");
+                        await OneDriveHelper.UploadFileAsync(fileAttachment.Name);
+                        Console.WriteLine($"        Done.");
+                    }
+                }
+            }
+            else 
+            {
+                Console.WriteLine("Sorry, this email has no attachment.\n");
+            }
+
+            break;
+            
 
         default:
             Console.WriteLine("Invalid choice! Please try again.");
