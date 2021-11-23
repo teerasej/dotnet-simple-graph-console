@@ -213,8 +213,12 @@ while (choice != 0)
             Console.WriteLine("Team Description:");
             var teamDescription = Console.ReadLine();
 
-            Console.WriteLine("     Creating...");
-            var createdTeam = await TeamHelper.CreateTeamAsync(teamName, teamDescription);
+            Console.WriteLine("Addition Channel name:");
+            var channelName = Console.ReadLine();
+
+            Console.WriteLine("     Creating team...");
+            var createdTeam = await TeamHelper.CreateTeamAsync(teamName, teamDescription, channelName);
+            Console.WriteLine("     Creating channel...");
             Console.WriteLine("     Done.");
             break;
 

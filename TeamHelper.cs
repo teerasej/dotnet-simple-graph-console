@@ -15,7 +15,7 @@ namespace simple_graph_console
             graphClient = client;
         }
 
-        public static async Task<Team> CreateTeamAsync(string teamName, string description) 
+        public static async Task<Team> CreateTeamAsync(string teamName, string description, string channelName) 
         {
             var newTeam = new Team
             {
@@ -24,12 +24,38 @@ namespace simple_graph_console
                 AdditionalData = new Dictionary<string, object>()
                 {
                     {"template@odata.bind", "https://graph.microsoft.com/v1.0/teamsTemplates('standard')"}
+                },
+                Channels = new TeamChannelsCollectionPage
+                {
+                    new Channel
+                    {
+                        DisplayName = channelName
+                    }
                 }
+                
             };
 
             try
             {
                 return await graphClient.Teams.Request().AddAsync(newTeam);
+            }
+            catch (ServiceException ex)
+            {
+                Console.WriteLine($"Error creating team: {ex.Message}");
+                return null;
+            }
+        }
+
+        public static async Task<Channel> CreateChannelAsync(string teamId, string channelName) 
+        {
+            var newChannel = new Channel
+            {
+                DisplayName = channelName,
+            };
+
+            try
+            {
+                return await graphClient.Teams[teamId].Channels.Request().AddAsync(newChannel);
             }
             catch (ServiceException ex)
             {
