@@ -70,7 +70,29 @@ namespace simple_graph_console
             }
             catch (ServiceException ex)
             {
-                Console.WriteLine($"Error creating new folder in onedrive: {ex.Message}");
+                Console.WriteLine($"Error downloading a file: {ex.Message}");
+            }
+
+        }
+
+        public static async Task UploadFileAsync(string fileName)
+        {
+            try
+            {
+                byte[] data = System.IO.File.ReadAllBytes(fileName);
+                Stream stream = new MemoryStream(data);
+
+                await graphClient.Me
+                .Drive
+                .Root
+                .ItemWithPath(fileName)
+                .Content
+                .Request()
+                .PutAsync<DriveItem>(stream);
+            }
+            catch (ServiceException ex)
+            {
+                Console.WriteLine($"Error uploading file to onedrive: {ex.Message}");
             }
 
         }

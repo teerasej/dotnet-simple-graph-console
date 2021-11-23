@@ -50,6 +50,7 @@ while (choice != 0)
     Console.WriteLine("5. List All Files");
     Console.WriteLine("6. New Folder");
     Console.WriteLine("7. Download a file");
+    Console.WriteLine("8. Upload a file");
 
 
     try
@@ -153,6 +154,15 @@ while (choice != 0)
 
             Console.WriteLine("Downloading...");
             await OneDriveHelper.DownloadFileAsync(itemId);
+            Console.WriteLine("Done!\n");
+            break;
+
+        case 8: 
+            Console.WriteLine("file name to upload (put file in project's root only):");
+            var fileName = Console.ReadLine();
+
+            Console.WriteLine("Uploading...");
+            await OneDriveHelper.UploadFileAsync(fileName);
             Console.WriteLine("Done!\n");
             break;
 
