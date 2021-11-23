@@ -1,4 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+// See https://aka.ms/new-console-template for more information
 using Microsoft.Extensions.Configuration;
 using Microsoft.Graph;
 using simple_graph_console;
@@ -76,7 +76,7 @@ while (choice != 0)
             break;
 
         case 3:
-            var emails = await EmailHelper.GetEmailsAsync(20);
+            var emails = await EmailHelper.GetEmailsAsync(5);
             for (int i = 0; i < emails.Count; i++)
             {
                 Message message = emails[i];
