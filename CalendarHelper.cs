@@ -51,13 +51,13 @@ namespace simple_graph_console
                     Start = new DateTimeTimeZone
                     {
                         DateTime = startTime,
-                        TimeZone = "Pacific Standard Time"
+                        TimeZone = "SE Asia Standard Time"
                     },
                     End = new DateTimeTimeZone
                     {
                         // DateTime = "2017-04-15T14:00:00",
                         DateTime = endTime,
-                        TimeZone = "Pacific Standard Time"
+                        TimeZone = "SE Asia Standard Time"
                     },
                     Location = new Location
                     {
@@ -68,7 +68,7 @@ namespace simple_graph_console
 
                 return await graphClient.Me.Events
                     .Request()
-                    .Header("Prefer", "outlook.timezone=\"Pacific Standard Time\"")
+                    .Header("Prefer", "outlook.timezone=\"SE Asia Standard Time\"")
                     .AddAsync(@event);
 
             }
