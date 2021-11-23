@@ -34,6 +34,8 @@ Console.WriteLine("Signed In...\n");
 EmailHelper.Initialize(GraphHelper.graphClient);
 // OneDriveHelper
 OneDriveHelper.Initialize(GraphHelper.graphClient);
+// TeamHelper
+TeamHelper.Initialize(GraphHelper.graphClient);
 
 int choice = -1;
 
@@ -54,6 +56,9 @@ while (choice != 0)
 
     Console.WriteLine("---- Mail to Drive ----");
     Console.WriteLine("9. Download attachment to OneDrive");
+
+    Console.WriteLine("---- Team ----");
+    Console.WriteLine("10. Create Team");
 
 
     try
@@ -201,6 +206,17 @@ while (choice != 0)
 
             break;
             
+        case 10:
+            Console.WriteLine("Team Name:");
+            var teamName = Console.ReadLine();
+
+            Console.WriteLine("Team Description:");
+            var teamDescription = Console.ReadLine();
+
+            Console.WriteLine("     Creating...");
+            var createdTeam = await TeamHelper.CreateTeamAsync(teamName, teamDescription);
+            Console.WriteLine("     Done.");
+            break;
 
         default:
             Console.WriteLine("Invalid choice! Please try again.");
